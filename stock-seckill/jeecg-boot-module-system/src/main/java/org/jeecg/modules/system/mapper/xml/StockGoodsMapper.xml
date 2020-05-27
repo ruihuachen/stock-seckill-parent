@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.jeecg.modules.system.mapper.StockGoodsMapper">
+
+    <update id="reduceNumber">
+        <!-- 具体的sql-->
+        update
+        stock_goods
+        set
+        inventory = inventory - 1,
+        sale = sale + 1
+        where id = #{stockGoodId}
+        and start_time <![CDATA[ <= ]]> #{killTime}
+        and end_time >= #{killTime}
+        and inventory > 0;
+    </update>
+
+
+    <select id="queryAll" resultType="org.jeecg.modules.system.entity.StockGoods">
+        select id, title, price, inventory, start_time, end_time, create_time
+        from stock_goods
+        where status = 1
+        order by start_time asc
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="getAdvanceCachingToRedis" resultType="org.jeecg.modules.system.entity.StockGoods">
+        select id, inventory, sale, `version`, title, price, start_time, end_time, create_time
+        from stock_goods
+        where status = 1
+        and start_time >= #{now}
+        and start_time <![CDATA[ <= ]]> #{end}
+        order by start_time asc
+        limit #{offset}, #{limit}
+    </select>
+
+</mapper>
