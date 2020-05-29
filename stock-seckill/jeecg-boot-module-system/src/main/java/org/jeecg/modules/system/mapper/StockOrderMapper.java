@@ -11,4 +11,7 @@ public interface StockOrderMapper extends BaseMapper<StockOrder> {
 
     int updateStatus(@Param("status") Integer status, @Param("id") String id);
 
+    String getIdByOrderId(String orderId);
+
+    int insertIgnore(StockOrder stockOrder);
 }

@@ -53,9 +53,6 @@ public class SysBaseApiImpl implements ISysBaseAPI {
      */
     public static String DB_TYPE = "";
 
-    @Autowired
-    private ISysMessageTemplateService sysMessageTemplateService;
-
     @Resource
     private SysLogMapper sysLogMapper;
 
@@ -68,8 +65,6 @@ public class SysBaseApiImpl implements ISysBaseAPI {
     @Autowired
     private ISysDictService sysDictService;
 
-    @Resource
-    private WebSocket webSocket;
     @Resource
     private SysRoleMapper roleMapper;
 
@@ -89,7 +84,6 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 
         //请求的方法名
         //请求的参数
-
         try {
             //获取request
             HttpServletRequest request = SpringContextUtils.getHttpServletRequest();
@@ -161,29 +155,6 @@ public class SysBaseApiImpl implements ISysBaseAPI {
         return sysDictService.queryTableDictItemsByCode(table, text, code);
     }
 
-    @Override
-    public List<DictModel> queryAllDepartBackDictModel() {
-        return sysDictService.queryAllDepartBackDictModel();
-    }
-
-    @Override
-    public String parseTemplateByCode(String templateCode, Map<String, String> map) {
-        List<SysMessageTemplate> sysSmsTemplates = sysMessageTemplateService.selectByCode(templateCode);
-        if (sysSmsTemplates == null || sysSmsTemplates.size() == 0) {
-            throw new JeecgBootException("消息模板不存在，模板编码：" + templateCode);
-        }
-        SysMessageTemplate sysSmsTemplate = sysSmsTemplates.get(0);
-        //模板内容
-        String content = sysSmsTemplate.getTemplateContent();
-        if (map != null) {
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                String str = "${" + entry.getKey() + "}";
-                content = content.replace(str, entry.getValue());
-            }
-        }
-        return content;
-    }
-
 
     /**
      * 获取数据库类型
@@ -241,10 +212,6 @@ public class SysBaseApiImpl implements ISysBaseAPI {
         return res;
     }
 
-    @Override
-    public List<DictModel> queryFilterTableDictInfo(String table, String text, String code, String filterSql) {
-        return sysDictService.queryTableDictItemsByCodeAndFilter(table, text, code, filterSql);
-    }
 
     @Override
     public List<String> queryTableDictByKeys(String table, String text, String code, String[] keyArray) {
@@ -331,11 +298,6 @@ public class SysBaseApiImpl implements ISysBaseAPI {
         return sysUserRoleMapper.getRoleIdByUserName(username);
     }
 
-    @Override
-    public DynamicDataSourceModel getDynamicDbSourceById(String dbSourceId) {
-        SysDataSource dbSource = dataSourceService.getById(dbSourceId);
-        return new DynamicDataSourceModel(dbSource);
-    }
 
     @Override
     public DynamicDataSourceModel getDynamicDbSourceByCode(String dbSourceCode) {
@@ -343,15 +305,6 @@ public class SysBaseApiImpl implements ISysBaseAPI {
         return new DynamicDataSourceModel(dbSource);
     }
 
-    @Override
-    public List<String> getDeptHeadByDepId(String deptId) {
-        List<SysUser> userList = userMapper.selectList(new QueryWrapper<SysUser>().like("depart_ids", deptId).eq("status", "1").eq("del_flag", "0"));
-        List<String> list = new ArrayList<>();
-        for (SysUser user : userList) {
-            list.add(user.getUsername());
-        }
-        return list;
-    }
 
     @Override
     public String upload(MultipartFile file, String bizPath, String uploadType) {

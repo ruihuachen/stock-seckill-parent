@@ -37,11 +37,12 @@ public class GoodTypeServiceImpl extends ServiceImpl<GoodTypeMapper, GoodType> i
 	@Override
 	public void updateGoodType(GoodType goodType) {
 		GoodType entity = this.getById(goodType.getId());
-		if(entity==null) {
+		if(entity == null) {
 			throw new JeecgBootException("未找到对应实体");
 		}
 		String old_pid = entity.getPid();
 		String new_pid = goodType.getPid();
+
 		if(!old_pid.equals(new_pid)) {
 			updateOldParentNode(old_pid);
 			if(oConvertUtils.isEmpty(new_pid)){
@@ -71,7 +72,7 @@ public class GoodTypeServiceImpl extends ServiceImpl<GoodTypeMapper, GoodType> i
 	private void updateOldParentNode(String pid) {
 		if(!IGoodTypeService.ROOT_PID_VALUE.equals(pid)) {
 			Integer count = goodTypeMapper.selectCount(new QueryWrapper<GoodType>().eq("pid", pid));
-			if(count==null || count<=1) {
+			if(count == null || count <= 1) {
 				goodTypeMapper.updateTreeNodeStatus(pid, IGoodTypeService.NOCHILD);
 			}
 		}

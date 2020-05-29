@@ -30,7 +30,7 @@ public interface IGoodTypeService extends IService<GoodType> {
     void addGoodType(GoodType goodType);
 
     /**
-     * 修改节点
+     * 修改类型
      */
     void updateGoodType(GoodType goodType) throws JeecgBootException;
 

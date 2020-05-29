@@ -148,43 +148,6 @@ public class StockGoodsController extends JeecgController<StockGoods, IStockGood
         return Result.ok(stockGoods);
     }
 
-
-    /**
-     * 导出excel
-     *
-     * @param request
-     */
-    @RequestMapping(value = "/exportXls")
-    public ModelAndView exportXls(StockGoods stockGoods, HttpServletRequest request) {
-        //Step.1 组装查询条件
-        QueryWrapper<StockGoods> queryWrapper = QueryGenerator.initQueryWrapper(stockGoods, request.getParameterMap());
-        //Step.2 AutoPoi 导出Excel
-        ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
-        List<StockGoods> pageList = stockGoodsService.list(queryWrapper);
-        //导出文件名称
-        mv.addObject(NormalExcelConstants.FILE_NAME, "票商品列表");
-        mv.addObject(NormalExcelConstants.CLASS, StockGoods.class);
-        //获取当前登陆的用户
-        LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("票商品列表数据", "导出人:"
-                + user.getRealname(), "导出信息"));
-        mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
-        return mv;
-    }
-
-    /**
-     * 通过excel导入数据
-     *
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
-    public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-        return super.importExcel(request, response, StockGoods.class);
-    }
-
-
     /**
      * 禁止出售和解禁出售该票商品
      *

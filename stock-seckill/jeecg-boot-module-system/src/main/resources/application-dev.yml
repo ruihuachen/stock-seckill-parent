@@ -7,7 +7,7 @@ server:
     # 配置最大线程数
     max-threads: 1000
   servlet:
-    context-path: /jeecg-boot
+    context-path: /stock-seckill
   compression:
     enabled: true
     min-response-size: 1024
@@ -65,7 +65,7 @@ spring:
       prefix: /WEB-INF/jsp/
       suffix: .jsp
   resource:
-    static-locations: classpath:/static/,classpath:/public/
+    static-locations: classpath:/static/
   autoconfigure:
     exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
   datasource:

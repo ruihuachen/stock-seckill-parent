@@ -81,7 +81,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteUser(String userId) {
 		//删除用户
-		this.removeById(userId);
+//		this.removeById(userId);
+		userMapper.deleteById(userId);
 	}
 
 	@Override
@@ -89,7 +90,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteBatchUsers(String userIds) {
 		//批量删除用户
-		this.removeByIds(Arrays.asList(userIds.split(",")));
+//		this.removeByIds(Arrays.asList(userIds.split(",")));
+		userMapper.deleteBatchIds(Arrays.asList(userIds.split(",")));
+
 	}
 
 	@Override

@@ -26,7 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @description: shiro 配置类
+ * shiro 配置类
  */
 
 @Slf4j
@@ -66,7 +66,6 @@ public class ShiroConfig {
 		}
 
 		//抢票模块接口排除
-		filterChainDefinitionMap.put("/frontDesk/**", "anon");
 		filterChainDefinitionMap.put("/seckill/**", "anon");
 
 
@@ -104,11 +103,9 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/**/*.png", "anon");
 		filterChainDefinitionMap.put("/**/*.ico", "anon");
 
-		// update-begin--Author:sunjianlei Date:20190813 for：排除字体格式的后缀
 		filterChainDefinitionMap.put("/**/*.ttf", "anon");
 		filterChainDefinitionMap.put("/**/*.woff", "anon");
 		filterChainDefinitionMap.put("/**/*.woff2", "anon");
-		// update-begin--Author:sunjianlei Date:20190813 for：排除字体格式的后缀
 
 		filterChainDefinitionMap.put("/druid/**", "anon");
 		filterChainDefinitionMap.put("/swagger-ui.html", "anon");

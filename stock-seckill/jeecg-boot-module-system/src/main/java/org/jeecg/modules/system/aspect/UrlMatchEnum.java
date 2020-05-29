@@ -1,9 +1,7 @@
 package org.jeecg.modules.system.aspect;
 
 /**
- * @Author scott
- * @Date 2020/1/14 13:36
- * @Description: 请求URL与菜单路由URL转换规则（方便于采用菜单路由URL来配置数据权限规则）
+ * 请求URL与菜单路由URL转换规则（方便于采用菜单路由URL来配置数据权限规则）
  */
 public enum UrlMatchEnum {
     CGFORM_DATA("/online/cgform/api/getData/", "/online/cgformList/"),

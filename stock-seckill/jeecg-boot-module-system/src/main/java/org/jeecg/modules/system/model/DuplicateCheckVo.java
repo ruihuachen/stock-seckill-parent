@@ -12,6 +12,7 @@ import java.io.Serializable;
 @Data
 @ApiModel(value = "重复校验数据模型", description = "重复校验数据模型")
 public class DuplicateCheckVo implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     /**

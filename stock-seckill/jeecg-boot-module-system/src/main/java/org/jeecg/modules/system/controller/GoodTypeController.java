@@ -61,10 +61,6 @@ public class GoodTypeController extends JeecgController<GoodType, IGoodTypeServi
 
     /**
      * 获取子数据
-     *
-     * @param
-     * @param req
-     * @return
      */
     @GetMapping(value = "/childList")
     public Result<?> queryPageList(GoodType goodType, HttpServletRequest req) {
@@ -76,9 +72,6 @@ public class GoodTypeController extends JeecgController<GoodType, IGoodTypeServi
 
     /**
      * 添加
-     *
-     * @param goodType
-     * @return
      */
     @PostMapping(value = "/add")
     public Result<?> add(@RequestBody GoodType goodType) {
@@ -88,9 +81,6 @@ public class GoodTypeController extends JeecgController<GoodType, IGoodTypeServi
 
     /**
      * 编辑
-     *
-     * @param goodType
-     * @return
      */
     @PutMapping(value = "/edit")
     public Result<?> edit(@RequestBody GoodType goodType) {

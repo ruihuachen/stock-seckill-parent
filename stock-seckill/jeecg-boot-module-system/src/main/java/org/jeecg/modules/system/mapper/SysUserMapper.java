@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface SysUserMapper extends BaseMapper<SysUser> {
 	/**
-	 * 通过用户账号查询用户信息 like
+	 * 通过用户账号查询用户信息
 	 */
 	SysUser getUserByName(@Param("username") String username);
 

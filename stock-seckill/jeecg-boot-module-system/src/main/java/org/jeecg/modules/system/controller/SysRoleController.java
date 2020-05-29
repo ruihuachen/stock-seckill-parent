@@ -189,12 +189,10 @@ public class SysRoleController {
             if (newRole != null) {
                 //如果根据传入的roleCode查询到信息了，那么就需要做校验了。
                 if (role == null) {
-                    //role为空=>新增模式=>只要roleCode存在则返回false
                     result.setSuccess(false);
                     result.setMessage("角色编码已存在");
                     return result;
                 } else if (!id.equals(newRole.getId())) {
-                    //否则=>编辑模式=>判断两者ID是否一致-
                     result.setSuccess(false);
                     result.setMessage("角色编码已存在");
                     return result;

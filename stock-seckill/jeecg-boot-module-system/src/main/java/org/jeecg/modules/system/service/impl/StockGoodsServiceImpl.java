@@ -49,15 +49,6 @@ public class StockGoodsServiceImpl extends ServiceImpl<StockGoodsMapper, StockGo
         return true;
     }
 
-    @Override
-    public void addGood(StockGoods stockGoods) {
-        this.save(stockGoods);
-    }
-
-    @Override
-    public void updateGood(StockGoods stockGoods) {
-        this.updateById(stockGoods);
-    }
 
 
     //--------------------------------------限时间抢票-------------------------------------------

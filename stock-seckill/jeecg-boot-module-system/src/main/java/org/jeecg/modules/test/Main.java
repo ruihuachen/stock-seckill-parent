@@ -22,19 +22,21 @@ public class Main implements Runnable {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        Thread thread = new Thread(new Main());
-        thread.start();
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-            }catch (InterruptedException e) {
+//        Thread thread = new Thread(new Main());
+//        thread.start();
+//        new Thread(() -> {
+//            try {
+//                Thread.sleep(1000);
+//            }catch (InterruptedException e) {
+//
+//            }
+//            thread.interrupt();
+//            System.out.println("interrupt");
+//        }).start();
+//        thread.join();
+//        System.out.println("exit");
 
-            }
-            thread.interrupt();
-            System.out.println("interrupt");
-        }).start();
-        thread.join();
-        System.out.println("exit");
+        System.out.println("ONR2020052916385828".substring(3));
     }
 
     //InterruptedException interrupt

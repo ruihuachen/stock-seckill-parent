@@ -5,10 +5,8 @@ import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.system.vo.LoginUser;
-import org.jeecg.common.util.DateUtils;
-import org.jeecg.common.util.FillRuleUtil;
-import org.jeecg.common.util.RedisUtil;
-import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.common.util.*;
+import org.jeecg.modules.system.controller.LoginController;
 import org.jeecg.modules.system.entity.*;
 import org.jeecg.modules.system.enums.RedisKeyEnum;
 import org.jeecg.modules.system.enums.SeckillStateEnum;
@@ -83,7 +81,8 @@ public class SeckillServiceImpl implements ISeckillService {
 
     @Override
     public List<StockGoods> getSeckillList() {
-        return stockGoodsMapper.queryAll(0, 10);
+        //return stockGoodsMapper.queryAll(0, 10);
+        return stockGoodsMapper.queryAll2();
     }
 
     /**
@@ -104,7 +103,7 @@ public class SeckillServiceImpl implements ISeckillService {
             if (stockGoods == null) {
                 return new Exposer(false, stockGoodId);
             }else {
-                //3.放入redis
+                //3.放入redis并设置超时时间
                 redisUtil.set(stockGoods.getId(), stockGoods, 60 * 60);
             }
         }
@@ -215,7 +214,13 @@ public class SeckillServiceImpl implements ISeckillService {
     public SeckillExecution executeSeckill(String stockGoodId, String md5) throws SeckillException, RepeatKillException, SeckillCloseException {
 
         try {
-            String currentUserId = ((LoginUser) SecurityUtils.getSubject().getPrincipal()).getId();
+//            LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
+//            System.out.println("4" + sysUser.toString());
+//            System.out.println();
+
+            //System.out.println("currentUserId: " + currentUserId);
+
+            String currentUserId = "e9ca23d68d884d4ebb19d07889727dae";
 
             //记录购买行为-完成对三张表的操作
             //订单-票商品表
@@ -231,22 +236,25 @@ public class SeckillServiceImpl implements ISeckillService {
             StockOrder order = new StockOrder(orderId, new Date(), price);
             order.setUserId(currentUserId);
             order.setGoodsId(stockGoodId);
+            String id = orderId.substring(3);
+            order.setId(id);
 
             System.out.println("order " + order.toString());
+            System.out.println();
 
-            int insertCount = stockOrderMapper.insert(order);
-
+            //忽略主键冲突
+            int insertCount = stockOrderMapper.insertIgnore(order);
             if (insertCount <= 0) {
                 //重复秒杀
                 log.warn("重复秒杀");
-                throw new RepeatKillException("seckill repeated");
+                throw new RepeatKillException("重复抢票");
             } else {
                 stockOrderGood.setProId(stockGood.getProId());
                 stockOrderGood.setTitle(stockGood.getTitle());
                 stockOrderGood.setDescription(stockGood.getDescription());
                 stockOrderGood.setPrice(stockGood.getPrice());
                 stockOrderGood.setTotalMoney(stockGood.getPrice());
-                stockOrderGood.setOrderMainId(orderId);
+                stockOrderGood.setOrderMainId(id);
 
                 System.out.println("stockOrderGood " + stockOrderGood.toString());
 
@@ -259,18 +267,18 @@ public class SeckillServiceImpl implements ISeckillService {
                 //订单-消费者表
                 System.out.println(".....currentUserId " + currentUserId);
                 OrderCustomer orderCustomer = userMapper.selectMessageForOrderCustomer(currentUserId);
-                orderCustomer.setOrderMainId(orderId);
+                orderCustomer.setOrderMainId(id);
 
                 System.out.println("orderCustomer " + orderCustomer);
 
                 orderCustomerMapper.insert(orderCustomer);
 
-                //乐观锁减少库存
+                //使用乐观锁插入-减少库存
                 int updateCount = stockGoodsMapper.updateByOptimisticLock(stockGood);
                 if (updateCount <= 0) {
                     //没有更新到记录,秒杀结束
                     log.warn("没有更新数据库记录,说明抢票结束");
-                    throw new SeckillCloseException("seckill is closed");
+                    throw new SeckillCloseException("抢票已结束");
                 } else {
                     //抢票成功
                     new SeckillExecution(stockGoodId, SeckillStateEnum.SUCCESS, order);
@@ -285,9 +293,9 @@ public class SeckillServiceImpl implements ISeckillService {
             throw e2;
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new SeckillException("system inner error:" + e.getMessage());
+            throw new SeckillException("系统内部错误:" + e.getMessage());
         }
-        return null;
+        return new SeckillExecution(stockGoodId, SeckillStateEnum.SUCCESS);
     }
 
     /**

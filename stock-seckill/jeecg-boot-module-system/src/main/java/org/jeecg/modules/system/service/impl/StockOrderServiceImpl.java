@@ -1,6 +1,7 @@
 package org.jeecg.modules.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.jeecg.common.util.FillRuleUtil;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.system.entity.OrderCustomer;
 import org.jeecg.modules.system.entity.StockOrderGood;
@@ -9,6 +10,8 @@ import org.jeecg.modules.system.mapper.StockGoodsMapper;
 import org.jeecg.modules.system.mapper.StockOrderGoodMapper;
 import org.jeecg.modules.system.mapper.StockOrderMapper;
 import org.jeecg.modules.system.entity.StockOrder;
+import org.jeecg.modules.system.rule.OrderNumberRule;
+import org.jeecg.modules.system.rule.OrderUserRule;
 import org.jeecg.modules.system.service.IStockOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +48,12 @@ public class StockOrderServiceImpl extends ServiceImpl<StockOrderMapper, StockOr
     @Transactional
     public void saveMain(StockOrder stockOrder, List<StockOrderGood> stockOrderGoodList,
                          List<OrderCustomer> orderCustomerList) {
+        if (oConvertUtils.listIsNotEmpty(orderCustomerList)) {
+            stockOrder.setUserId(orderCustomerList.get(0).getUsername());
+        }else {
+            stockOrder.setUserId(OrderUserRule.getOrderUserRule());
+        }
+        stockOrder.setGoodsId((String) FillRuleUtil.executeRule("food_code_num", null));
         //新增主表-订单信息
         stockOrderMapper.insert(stockOrder);
         commonMethodsForInsert(stockOrder, stockOrderGoodList, orderCustomerList);
@@ -89,6 +98,11 @@ public class StockOrderServiceImpl extends ServiceImpl<StockOrderMapper, StockOr
                 entity.setOrderMainId(stockOrder.getId());
                 entity.setProId(stockGoodsMapper.getProIdByTitle(entity.getTitle()));
                 stockOrderGoodMapper.insert(entity);
+
+                //扣库存
+                String proId = entity.getProId();
+                int num = entity.getNumber();
+                stockGoodsMapper.updateByOptimisticLockByProId(proId, num);
             }
         }
 

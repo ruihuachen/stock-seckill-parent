@@ -52,6 +52,12 @@ public interface StockGoodsMapper extends BaseMapper<StockGoods> {
     @Update("update stock_goods set inventory = inventory - 1, sale = sale + 1, version = version + 1 where id = #{id}")
     int updateByOptimisticLock(StockGoods stock);
 
+    /**
+     * 乐观锁-内部
+     */
+    @Update("update stock_goods set inventory = inventory - #{num}, sale = sale + #{num}, version = version + 1 where pro_id = #{proId}")
+    int updateByOptimisticLockByProId(String proId, int num);
+
 
     //-----------------------------------------------------------------------------------------------
 
@@ -70,6 +76,9 @@ public interface StockGoodsMapper extends BaseMapper<StockGoods> {
      * @return
      */
     List<StockGoods> queryAll(@Param("offset") int offset, @Param("limit") int limit);
+
+
+    List<StockGoods> queryAll2();
 
 
     List<StockGoods> getAdvanceCachingToRedis(@Param("now") Date now,@Param("end") Date end, @Param("offset") int offset, @Param("limit") int limit);

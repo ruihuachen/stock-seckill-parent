@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @description: autopoi 配置类
+ * autopoi 配置类
  */
 
 @Configuration

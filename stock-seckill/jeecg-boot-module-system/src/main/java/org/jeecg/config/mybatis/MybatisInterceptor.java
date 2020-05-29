@@ -93,19 +93,15 @@ public class MybatisInterceptor implements Interceptor {
 			Field[] fields = null;
 			if (parameter instanceof ParamMap) {
 				ParamMap<?> p = (ParamMap<?>) parameter;
-				//update-begin-author:scott date:20190729 for:批量更新报错issues/IZA3Q--
 				if (p.containsKey("et")) {
 					parameter = p.get("et");
 				} else {
 					parameter = p.get("param1");
 				}
-				//update-end-author:scott date:20190729 for:批量更新报错issues/IZA3Q-
 
-				//update-begin-author:scott date:20190729 for:更新指定字段时报错 issues/#516-
 				if (parameter == null) {
 					return invocation.proceed();
 				}
-				//update-end-author:scott date:20190729 for:更新指定字段时报错 issues/#516-
 
 				fields = oConvertUtils.getAllFields(parameter);
 			} else {
@@ -147,7 +143,6 @@ public class MybatisInterceptor implements Interceptor {
 		// TODO Auto-generated method stub
 	}
 
-	//update-begin--Author:scott  Date:20191213 for：关于使用Quzrtz 开启线程任务， #465
 	private LoginUser getLoginUser() {
 		LoginUser sysUser = null;
 		try {
@@ -157,6 +152,5 @@ public class MybatisInterceptor implements Interceptor {
 		}
 		return sysUser;
 	}
-	//update-end--Author:scott  Date:20191213 for：关于使用Quzrtz 开启线程任务， #465
 
 }

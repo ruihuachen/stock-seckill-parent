@@ -5,13 +5,13 @@ var seckill = {
     URL: {
         //现在的时间
         now:function () {
-            return '/jeecg-boot/seckill/time/now';
+            return '/stock-seckill/seckill/time/now';
         },
         exposer:function (stockGoodId) {
-            return '/jeecg-boot/seckill/' + stockGoodId + "/exposer";
+            return '/stock-seckill/seckill/' + stockGoodId + "/exposer";
         },
         execution:function (stockGoodId, md5) {
-            return '/jeecg-boot/seckill/'+ stockGoodId + '/' + md5 + '/execute';
+            return '/stock-seckill/seckill/'+ stockGoodId + '/' + md5 + '/execute';
         }
     },
     //进入抢票逻辑

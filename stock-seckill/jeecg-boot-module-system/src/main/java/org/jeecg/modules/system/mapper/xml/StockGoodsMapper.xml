@@ -34,4 +34,10 @@
         limit #{offset}, #{limit}
     </select>
 
+    <select id="queryAll2" resultType="org.jeecg.modules.system.entity.StockGoods">
+        select * from stock_goods
+        where status = 1
+        order by end_time asc
+    </select>
+
 </mapper>

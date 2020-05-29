@@ -50,9 +50,10 @@ public class SeckillController {
      */
     @GetMapping(value = "/list")
     public String list(Model model) {
-        //获取列表页 TODO：分页-查询
+        //获取列表页
         List<StockGoods> list = seckillService.getSeckillList();
         model.addAttribute("list", list);
+
         return "list";
     }
 
@@ -77,6 +78,7 @@ public class SeckillController {
         System.out.println(stockGood.toString() + "\n");
 
         model.addAttribute("stockGood", stockGood);
+
         return "detail";
     }
 
@@ -115,15 +117,19 @@ public class SeckillController {
         //打印前端传入的字段
         System.out.println(stockGoodId + " "+md5+" ");
 
+        //获取票商品id和当前登陆用户即买家id -> 创建订单
+//        LoginUser currentUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+//        System.out.println("SecurityUtils.getSubject " + currentUser.toString());
+
         try {
-            //获取票商品id和当前登陆用户即买家id -> 创建订单
-            LoginUser currentUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-            System.out.println("SecurityUtils.getSubject " + currentUser.toString());
 
             //先创建订单
-            StockOrder stockOrder = seckillService.getSeckillOrder(stockGoodId, currentUser.getId());
+            //StockOrder stockOrder = seckillService.getSeckillOrder(stockGoodId, currentUser.getId());
             //在执行抢票
-            SeckillExecution execution = seckillService.executeSeckill(stockOrder, md5);
+            //SeckillExecution execution = seckillService.executeSeckill(stockOrder, md5);
+
+            SeckillExecution execution = seckillService.executeSeckill(stockGoodId, md5);
+
             return new SeckillResult<>(true, execution);
         } catch (RepeatKillException e) {
             SeckillExecution execution = new SeckillExecution(stockGoodId, SeckillStateEnum.REPEAT_KILL);

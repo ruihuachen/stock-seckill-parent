@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.security.SecurityUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -213,7 +212,6 @@ public class SysUserController {
                 //String passwordEncode = PasswordUtil.encrypt(user.getUsername(), user.getPassword(), sysUser.getSalt());
                 user.setPassword(sysUser.getPassword());
                 String roles = jsonObject.getString("selectedroles");
-//                String departs = jsonObject.getString("selecteddeparts");
                 sysUserService.editUserWithRole(user, roles);
                 result.success("修改成功!");
             }

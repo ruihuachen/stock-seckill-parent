@@ -14,10 +14,6 @@ public interface IStockGoodsService extends IService<StockGoods> {
 
     boolean deleteBatchGood(String[] goodIds);
 
-    void addGood(StockGoods stockGoods);
-
-    void updateGood(StockGoods stockGoods);
-
     //--------------------------------------限时间抢票-------------------------------------------
 
     // 根据id -> 获取剩余库存数
