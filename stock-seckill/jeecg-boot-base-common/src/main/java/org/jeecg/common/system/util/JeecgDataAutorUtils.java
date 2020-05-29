@@ -10,11 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @ClassName: JeecgDataAutorUtils
- * @Description: 数据权限查询规则容器工具类
- * @Author: 张代浩
- * @Date: 2012-12-15 下午11:27:39
- * 
+ * 数据权限查询规则容器工具类
  */
 public class JeecgDataAutorUtils {
 	

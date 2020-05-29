@@ -32,12 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p>
  * 用户表 前端控制器
- * </p>
- *
- * @Author scott
- * @since 2018-12-20
  */
 @Slf4j
 @RestController
